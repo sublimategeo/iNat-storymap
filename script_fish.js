@@ -128,7 +128,7 @@ const legendItems = [
   { key: "steelhead", label: "Steelhead" },
   { key: "dolly_varden", label: "Dolly Varden" },
   { key: "sculpin", label: "Sculpin (General)" },
-  { key: "unknown", label: "Fish Unidentified Species" }
+  { key: "unknown", label: "Others" }
 ];
 
 const legend = L.control({ position: "bottomright" });
@@ -228,26 +228,30 @@ fetch(url)
     });
 
 // --- Load BC Provincial Observations (STATIC HOSTED FEATURE LAYER) ---
-const bcLayerUrl = "https://services7.arcgis.com/MNgXxsTORgPk9EjE/arcgis/rest/services/fish_known_obs_20251202/FeatureServer/0";
-
 L.esri.featureLayer({
-    url: bcLayerUrl,
-    // Use pointToLayer so we can set a custom icon
-    pointToLayer: function (feature, latlng) {
-        const attrs = feature.properties || feature.attributes || {};
+  url: bcLayerUrl,
+  // optional: limit to the 8 species of interest
+  // where: "SPECIES_NAME IN ('Cutthroat Trout','Dolly Varden','Rainbow Trout'," +
+  //        "'Coastal Cutthroat Trout','Steelhead','Fish Unidentified Species'," +
+  //        "'Coho Salmon','Sculpin (General)')",
 
-        // 🔴 THIS is the important line now:
-        const speciesName = attrs.SPECIES_NAME || "";
+  pointToLayer: function (feature, latlng) {
+    const attrs = feature.properties || feature.attributes || {};
 
-        const icon = iconForSpecies(speciesName);
+    // BC species name column
+    const speciesName = attrs.SPECIES_NAME || "";
 
-        return L.marker(latlng, { icon }).bindPopup(
-            `
+    // Use the same classifier + icon system as iNat
+    const icon = iconForSpecies(speciesName);
+
+    return L.marker(latlng, { icon }).bindPopup(
+      `
       <strong>${speciesName || "Fish observation"}</strong><br/>
       LIFE_STAGE: ${attrs.LIFE_STAGE || "NA"}<br/>
       SOURCE: ${attrs.SOURCE || "NA"}<br/>
       ID: ${attrs.FISH_OBSERVATION_POINT_ID || ""}`
-        );
-    }
+    );
+  }
 }).addTo(map);
+
 

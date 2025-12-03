@@ -14,14 +14,16 @@ const map = L.map("map", {
 // ArcGIS Topographic basemap
 L.esri.basemapLayer("Topographic").addTo(map);
 
-// Optional AOI rectangle
-L.rectangle(
-    [
-        [swLat, swLon],
-        [neLat, neLon]
-    ],
-    { color: "#666", weight: 1, fillOpacity: 0 }
-).addTo(map);
+// AOI
+L.esri.featureLayer({
+  url: "https://services7.arcgis.com/MNgXxsTORgPk9EjE/arcgis/rest/services/storymap_boundary/FeatureServer/0",
+  style: {
+    color: "#ff6600",
+    weight: 2,
+    fillOpacity: 0
+  }
+}).addTo(map);
+
 
 // Attribution for SVG icons
 map.attributionControl.addAttribution(
@@ -229,6 +231,7 @@ L.esri.featureLayer({
         );
     }
 }).addTo(map);
+
 
 
 

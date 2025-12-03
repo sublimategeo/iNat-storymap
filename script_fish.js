@@ -202,7 +202,7 @@ fetch(inatUrl)
 
 // --- Load BC Provincial Observations (STATIC HOSTED FEATURE LAYER) ---
 
-const bcLayerUrl = "https://services7.arcgis.com/MNgXxsTORgPk9EjE/arcgis/rest/services/fish_known_obs_20251202/FeatureServer"
+const bcLayerUrl = "https://services7.arcgis.com/MNgXxsTORgPk9EjE/arcgis/rest/services/fish_known_obs_20251202/FeatureServer/0"
 
 L.esri.featureLayer({
     url: bcLayerUrl,
@@ -229,6 +229,7 @@ L.esri.featureLayer({
         );
     }
 }).addTo(map);
+
 
 
 

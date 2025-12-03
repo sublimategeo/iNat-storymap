@@ -41,49 +41,49 @@ const popupAnchor = [0, -14];
 
 const icons = {
     cutthroat: L.icon({
-        iconUrl: "color_fish_1.svg",
+        iconUrl: "icons/color_fish_1.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     dolly_varden: L.icon({
-        iconUrl: "color_fish_2.svg",
+        iconUrl: "icons/color_fish_2.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     rainbow_trout: L.icon({
-        iconUrl: "color_fish_3.svg",
+        iconUrl: "icons/color_fish_3.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     coastal_cutthroat: L.icon({
-        iconUrl: "color_fish_4.svg",
+        iconUrl: "icons/color_fish_4.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     steelhead: L.icon({
-        iconUrl: "color_fish_5.svg",
+        iconUrl: "icons/color_fish_5.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     coho: L.icon({
-        iconUrl: "color_fish_6.svg",
+        iconUrl: "icons/color_fish_6.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     sculpin: L.icon({
-        iconUrl: "color_fish_7.svg",
+        iconUrl: "icons/color_fish_7.svg",
         iconSize,
         iconAnchor,
         popupAnchor
     }),
     unknown: L.icon({
-        iconUrl: "unknown_fish.svg",
+        iconUrl: "icons/unknown_fish.svg",
         iconSize,
         iconAnchor,
         popupAnchor

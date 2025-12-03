@@ -200,33 +200,6 @@ fetch(inatUrl)
         console.error("Error loading iNaturalist data:", err);
     });
 
-// --- Load iNat live observations ---
-fetch(url)
-    .then(r => r.json())
-    .then(data => {
-        data.results.forEach(obs => {
-            if (!obs.geojson) return;
-
-            const coords = obs.geojson.coordinates.slice().reverse();
-
-            const nameForClass =
-                (obs.taxon && (obs.taxon.preferred_common_name || obs.taxon.name)) ||
-                obs.species_guess ||
-                "";
-
-            const key = classifySpeciesName(nameForClass);
-            const icon = icons[key] || icons.default;
-
-            L.marker(coords, { icon })
-                .bindPopup(`
-          <strong>${obs.species_guess || "Unknown"}</strong><br/>
-          ${obs.taxon ? obs.taxon.preferred_common_name || obs.taxon.name : ""}<br/>
-          <a href="${obs.uri}" target="_blank">View on iNaturalist</a>
-        `)
-                .addTo(map);
-        });
-    });
-
 // --- Load BC Provincial Observations (STATIC HOSTED FEATURE LAYER) ---
 
 const bcLayerUrl = "https://services7.arcgis.com/MNgXxsTORgPk9EjE/arcgis/rest/services/fish_known_obs_20251202/FeatureServer"
@@ -256,5 +229,6 @@ L.esri.featureLayer({
         );
     }
 }).addTo(map);
+
 
 

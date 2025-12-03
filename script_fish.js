@@ -11,6 +11,19 @@ const map = L.map("map", {
     attributionControl: true
 }).setView([centerLat, centerLon], 12);
 
+// ArcGIS Topographic basemap
+L.esri.basemapLayer("Topographic").addTo(map);
+
+// Optional AOI rectangle
+L.rectangle(
+  [
+    [swLat, swLon],
+    [neLat, neLon]
+  ],
+  { color: "#666", weight: 1, fillOpacity: 0 }
+).addTo(map);
+
+// Attribution for SVG icons
 map.attributionControl.addAttribution(
     'Fish icons © <a href="https://www.svgrepo.com/svg/481416/salmon-1" target="_blank">SVG Repo</a>'
 );
@@ -77,40 +90,69 @@ const icons = {
     })
 };
 
+// Species -> icon
 function classifySpeciesName(nameRaw) {
-    const name = (nameRaw || "").toLowerCase().trim();
+  const name = (nameRaw || "").toLowerCase().trim();
 
-    if (!name) return "unknown";
+  if (!name) return "unknown";
 
-    // order: specific → general
-    if (name === "coho salmon" || name.includes("coho")) return "coho";
-    if (name === "coastal cutthroat trout" || name.includes("coastal cutthroat"))
-        return "coastal_cutthroat";
-    if (name === "cutthroat trout" || name.includes("cutthroat"))
-        return "cutthroat";
-    if (name === "dolly varden" || name.includes("dolly varden"))
-        return "dolly_varden";
-    if (name === "steelhead" || name.includes("steelhead")) return "steelhead";
-    if (name === "rainbow trout" || name.includes("rainbow"))
-        return "rainbow_trout";
-    if (name.startsWith("sculpin")) return "sculpin";
-    if (name.startsWith("fish unidentified")) return "unknown";
+  if (name === "coho salmon" || name.includes("coho")) return "coho";
+  if (name === "coastal cutthroat trout" || name.includes("coastal cutthroat"))
+    return "coastal_cutthroat";
+  if (name === "cutthroat trout" || name.includes("cutthroat"))
+    return "cutthroat";
+  if (name === "dolly varden" || name.includes("dolly varden"))
+    return "dolly_varden";
+  if (name === "steelhead" || name.includes("steelhead")) return "steelhead";
+  if (name === "rainbow trout" || name.includes("rainbow"))
+    return "rainbow_trout";
+  if (name.startsWith("sculpin")) return "sculpin";
+  if (name.startsWith("fish unidentified")) return "unknown";
 
-    return "unknown";
+  return "unknown";
 }
 
-
-// --- Add basemap ---
-L.esri.basemapLayer('Topographic').addTo(map);
-
-// --- Draw AOI rectangle (optional) ---
-L.rectangle([[swLat, swLon], [neLat, neLon]], { color: "#999", weight: 1, fillOpacity: 0 }).addTo(map);
-
-// Get correct Leaflet icon from a species name
 function iconForSpecies(nameRaw) {
-    const key = classifySpeciesName(nameRaw);
-    return icons[key] || icons.unknown;
+  const key = classifySpeciesName(nameRaw);
+  return icons[key] || icons.unknown;
 }
+
+
+// --- Legend ---
+const legendItems = [
+  { key: "coho", label: "Coho Salmon" },
+  { key: "coastal_cutthroat", label: "Coastal Cutthroat Trout" },
+  { key: "cutthroat", label: "Cutthroat Trout" },
+  { key: "rainbow_trout", label: "Rainbow Trout" },
+  { key: "steelhead", label: "Steelhead" },
+  { key: "dolly_varden", label: "Dolly Varden" },
+  { key: "sculpin", label: "Sculpin (General)" },
+  { key: "unknown", label: "Fish Unidentified Species" }
+];
+
+const legend = L.control({ position: "bottomright" });
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create("div", "legend leaflet-control");
+  div.innerHTML = "<h4>Species</h4>";
+
+  legendItems.forEach((item) => {
+    const icon = icons[item.key];
+    if (!icon) return;
+
+    div.innerHTML += `
+      <div class="legend-row">
+        <img src="${icon.options.iconUrl}" width="18" height="18" alt="${item.label}">
+        <span>${item.label}</span>
+      </div>
+    `;
+  });
+
+  L.DomEvent.disableClickPropagation(div);
+  return div;
+};
+
+legend.addTo(map);
 
 // --- iNaturalist observations ---
 
@@ -118,45 +160,44 @@ function iconForSpecies(nameRaw) {
 const taxonIds = [53692, 128272, 47516, 68077, 47645];
 
 const inatUrl =
-    `https://api.inaturalist.org/v1/observations` +
-    `?taxon_ids=${taxonIds.join(",")}` +
-    `&nelat=${neLat}&nelng=${neLon}` +
-    `&swlat=${swLat}&swlng=${swLon}` +
-    `&per_page=200`;
+  `https://api.inaturalist.org/v1/observations` +
+  `?taxon_ids=${taxonIds.join(",")}` +
+  `&nelat=${neLat}&nelng=${neLon}` +
+  `&swlat=${swLat}&swlng=${swLon}` +
+  `&per_page=200`;
 
 fetch(inatUrl)
-    .then((r) => r.json())
-    .then((data) => {
-        data.results.forEach((obs) => {
-            if (!obs.geojson) return;
+  .then((r) => r.json())
+  .then((data) => {
+    data.results.forEach((obs) => {
+      if (!obs.geojson) return;
 
-            const coords = obs.geojson.coordinates.slice().reverse(); // [lat, lon]
+      const coords = obs.geojson.coordinates.slice().reverse(); // [lat, lon]
 
-            // Try common name first, fall back to scientific, then guess
-            const nameForClass =
-                (obs.taxon &&
-                    (obs.taxon.preferred_common_name || obs.taxon.name)) ||
-                obs.species_guess ||
-                "";
+      const nameForClass =
+        (obs.taxon &&
+          (obs.taxon.preferred_common_name || obs.taxon.name)) ||
+        obs.species_guess ||
+        "";
 
-            const icon = iconForSpecies(nameForClass);
+      const icon = iconForSpecies(nameForClass);
 
-            L.marker(coords, { icon })
-                .bindPopup(
-                    `
+      L.marker(coords, { icon: icon })
+        .bindPopup(
+          `
           <strong>${obs.species_guess || "Unknown"}</strong><br/>
           ${obs.taxon
-                        ? obs.taxon.preferred_common_name || obs.taxon.name
-                        : ""}<br/>
+            ? obs.taxon.preferred_common_name || obs.taxon.name
+            : ""}<br/>
           <a href="${obs.uri}" target="_blank">View on iNaturalist</a>
         `
-                )
-                .addTo(map);
-        });
-    })
-    .catch((err) => {
-        console.error("Error loading iNaturalist data:", err);
+        )
+        .addTo(map);
     });
+  })
+  .catch((err) => {
+    console.error("Error loading iNaturalist data:", err);
+  });
 
 // --- Load iNat live observations ---
 fetch(url)
@@ -194,6 +235,7 @@ L.esri.featureLayer({
     pointToLayer: function (feature, latlng) {
         const attrs = feature.properties || feature.attributes || {};
 
+        // 🔴 THIS is the important line now:
         const speciesName = attrs.SPECIES_NAME || "";
 
         const icon = iconForSpecies(speciesName);

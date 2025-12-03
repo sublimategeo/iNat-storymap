@@ -40,55 +40,56 @@ const iconAnchor = [14, 14];
 const popupAnchor = [0, -14];
 
 const icons = {
-    cutthroat: L.icon({
-        iconUrl: "icons/color_fish_1.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    dolly_varden: L.icon({
-        iconUrl: "icons/color_fish_2.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    rainbow_trout: L.icon({
-        iconUrl: "icons/color_fish_3.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    coastal_cutthroat: L.icon({
-        iconUrl: "icons/color_fish_4.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    steelhead: L.icon({
-        iconUrl: "icons/color_fish_5.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    coho: L.icon({
-        iconUrl: "icons/color_fish_6.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    sculpin: L.icon({
-        iconUrl: "icons/color_fish_7.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    }),
-    unknown: L.icon({
-        iconUrl: "icons/unknown_fish.svg",
-        iconSize,
-        iconAnchor,
-        popupAnchor
-    })
+  cutthroat: L.icon({
+    iconUrl: "icons/color_fish_1.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  dolly_varden: L.icon({
+    iconUrl: "icons/color_fish_2.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  rainbow_trout: L.icon({
+    iconUrl: "icons/color_fish_3.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  coastal_cutthroat: L.icon({
+    iconUrl: "icons/color_fish_4.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  steelhead: L.icon({
+    iconUrl: "icons/color_fish_5.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  coho: L.icon({
+    iconUrl: "icons/color_fish_6.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  sculpin: L.icon({
+    iconUrl: "icons/color_fish_7.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  }),
+  unknown: L.icon({
+    iconUrl: "icons/unknown_fish.svg",
+    iconSize,
+    iconAnchor,
+    popupAnchor
+  })
 };
+
 
 // Species -> icon
 function classifySpeciesName(nameRaw) {

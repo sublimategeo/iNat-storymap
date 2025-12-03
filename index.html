@@ -1,32 +1,51 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>iNaturalist Fish AOI Map</title>
     <style>
-        html,
-        body,
-        #map {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+      html,
+      body,
+      #map {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .legend {
+        background: white;
+        padding: 6px 8px;
+        border-radius: 4px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        font: 12px/14px Arial, sans-serif;
+      }
+
+      .legend h4 {
+        margin: 0 0 4px 0;
+        font-size: 12px;
+      }
+
+      .legend-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3px;
+      }
+
+      .legend-row img {
+        margin-right: 4px;
+      }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</head>
 
-<body>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
+  <body>
     <div id="map"></div>
-
-    <footer
-        style="position:absolute; bottom:5px; left:5px; background:white; padding:4px 8px; font-size:12px; opacity:0.8;">
-        Icons courtesy of <a href="https://www.svgrepo.com/svg/481416/salmon-1" target="_blank">SVG Repo</a>.
-    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js"></script>
     <script src="script_fish.js"></script>
-</body>
-
+  </body>
 </html>

@@ -194,7 +194,6 @@ L.esri.featureLayer({
     pointToLayer: function (feature, latlng) {
         const attrs = feature.properties || feature.attributes || {};
 
-        // 🔴 THIS is the important line now:
         const speciesName = attrs.SPECIES_NAME || "";
 
         const icon = iconForSpecies(speciesName);
